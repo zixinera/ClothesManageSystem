@@ -118,8 +118,25 @@ function closeAddDialog(){
     $("#addDialog").hide();
 }
 
-function openUpdateDialog(){
+function openUpdateDialog(product){
     $("#updateDialog").show();
+    var judgment = null;
+    if (product.isReturn){
+        judgment = "是";
+    }else {
+        judgment = "否";
+    }
+    $("#updateId").val(product.productId);
+    $("#updateName").val(product.productName);
+    $("#updateCategory").val(product.productCategory);
+    $("#updatePurchase").val(product.productPurchase);
+    $("#updateSelling").val(product.productSelling);
+    $("#updateQuantity").val(product.productQuantity);
+    $("#updateETime").val(product.entryTime);
+    $("#updateUTime").val(product.updateTime);
+    $("#updateReturn").val(judgment);
+    $("#updateUserId").val(product.userId);
+    $("#updateStatus").val(product.salesStatus);
 }
 
 function closeUpdateDialog(){

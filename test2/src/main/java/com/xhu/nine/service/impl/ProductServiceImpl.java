@@ -20,8 +20,13 @@ public class ProductServiceImpl implements ProductService {
     public AjaxResult queryProducts(ProductQueryDto productQueryDto) {
         Product product = new Product();
         BeanUtils.copyProperties(productQueryDto, product);
-        System.out.printf(product.toString());
         List<Product> products = productMapper.selectProductAll(product);
         return AjaxResult.ok().data(products);
+    }
+
+    @Override
+    public AjaxResult queryProductById(Integer productId) {
+        Product product = productMapper.selectProductById(productId);
+        return AjaxResult.ok().data(product);
     }
 }

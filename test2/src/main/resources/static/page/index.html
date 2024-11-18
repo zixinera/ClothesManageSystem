@@ -28,7 +28,6 @@
 </div>
 <div id="operateDialog">
     <input type="button" value="录入" onclick="openAddDialog()">
-    <input type="button" value="修改" onclick="openUpdateDialog()">
     <input type="button" value="删除" onclick="deleteProducts()">
     <table>
         <tr>
@@ -57,8 +56,8 @@
         <span>货物进价：</span><input type="text" id="addPurchase" placeholder="请输入货物进价">
         <span>货物售价：</span><input type="text" id="addSelling" placeholder="请输入货物售价">
         <span>货物数量：</span><input type="text" id="addQuantity" placeholder="请输入货物数量">
-        <span>录入时间：</span><input type="date" id="addETime">
-        <span>更新时间：</span><input type="date" id="addUTime">
+        <input type="hidden" id="addETime">
+        <input type="hidden" id="addUTime">
         <span>是否退回：</span><input type="text" id="addReturn" placeholder="请输入货物是否退回">
         <span>操作人编号：</span><input type="text" id="addUserId" placeholder="请输入操作人编号">
         <span>销售状态：</span><input type="text" id="addStatus" placeholder="请输入货物销售状态">
@@ -69,13 +68,14 @@
 </div>
 <div style="display: none" id="updateDialog">
     <form>
+        <input type="hidden" id="updateId">
         <span>货物名称：</span><input type="text" id="updateName">
         <span>货物类别：</span><input type="text" id="updateCategory">
         <span>货物进价：</span><input type="text" id="updatePurchase">
         <span>货物售价：</span><input type="text" id="updateSelling">
         <span>货物数量：</span><input type="text" id="updateQuantity">
-        <span>录入时间：</span><input type="date" id="updateETime">
-        <span>更新时间：</span><input type="date" id="updateUTime">
+        <input type="hidden" id="updateETime">
+        <input type="hidden" id="updateUTime">
         <span>是否退回：</span><input type="text" id="updateReturn">
         <span>操作人编号：</span><input type="text" id="updateUserId">
         <span>销售状态：</span><input type="text" id="updateStatus">

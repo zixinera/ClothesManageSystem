@@ -16,4 +16,9 @@ public class ProductController {
     public AjaxResult findProducts(ProductQueryDto productQueryDto){
         return productService.queryProducts(productQueryDto);
     }
+
+    @PostMapping("/updateProduct")
+    public AjaxResult findProductById(Integer productId){
+        return productService.queryProductById(productId);
+    }
 }

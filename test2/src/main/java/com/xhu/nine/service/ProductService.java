@@ -5,4 +5,5 @@ import com.xhu.nine.result.AjaxResult;
 
 public interface ProductService {
     AjaxResult queryProducts(ProductQueryDto productQueryDto);
+    AjaxResult queryProductById(Integer productId);
 }
