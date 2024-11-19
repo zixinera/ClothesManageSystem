@@ -2,10 +2,10 @@
 spring:
   datasource:
     username: root
-    password: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/clothes?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
 
 logging:
   level:
-    com.xhu.wyt: debug
+    com.xhu.nine: debug
