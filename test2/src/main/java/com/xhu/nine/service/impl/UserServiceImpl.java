@@ -21,13 +21,8 @@ public class UserServiceImpl implements UserService {
     @Override
 public AjaxResult login(@RequestBody LoginDto loginDto) {
     // 从 DTO 获取用户名和密码
-    String userName = loginDto.getUserName();
-    String password = loginDto.getUserPassword();
-
-    //test语句
-    String AAA = "李大壮";
-    User user = userMapper.selectUserByName(AAA);
-    System.out.println(user.getUserName());
+    String userName = loginDto.getUsername();
+    String password = loginDto.getPassword();
 
     // 查询用户
     User u = userMapper.selectUserByName(userName);
@@ -37,6 +32,12 @@ public AjaxResult login(@RequestBody LoginDto loginDto) {
 
     // 密码加密
     String encryptedPassword = Md5Util.getMD5String(password);
+
+    //test
+        System.out.println("111111111111111111111111111");
+        System.out.println(encryptedPassword);
+        System.out.println(u.getUserPassword());
+        System.out.println("111111111111111111111111111");
     // 检查密码是否匹配
     if (encryptedPassword.equals(u.getUserPassword())) {
         return AjaxResult.ok().message("登录成功！");
@@ -67,7 +68,7 @@ public AjaxResult login(@RequestBody LoginDto loginDto) {
         }
 
         // 加密密码并存储
-        user.setUserPassword(Md5Util.getMD5String(user.getUserPassword()));
+       user.setUserPassword(Md5Util.getMD5String(user.getUserPassword()));
 
         // 插入用户数据
         userMapper.insertUser(user);
