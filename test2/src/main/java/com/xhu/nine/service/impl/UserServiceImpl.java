@@ -33,11 +33,6 @@ public AjaxResult login(@RequestBody LoginDto loginDto) {
     // 密码加密
     String encryptedPassword = Md5Util.getMD5String(password);
 
-    //test
-        System.out.println("111111111111111111111111111");
-        System.out.println(encryptedPassword);
-        System.out.println(u.getUserPassword());
-        System.out.println("111111111111111111111111111");
     // 检查密码是否匹配
     if (encryptedPassword.equals(u.getUserPassword())) {
         return AjaxResult.ok().message("登录成功！");
@@ -48,7 +43,7 @@ public AjaxResult login(@RequestBody LoginDto loginDto) {
 
 
 
-
+    String inviteCode = "5201314";
     @Override
     public AjaxResult register(@RequestBody RegisterDto registerDto) {
         // 检查用户名是否已存在
@@ -61,7 +56,7 @@ public AjaxResult login(@RequestBody LoginDto loginDto) {
         BeanUtils.copyProperties(registerDto, user);
 
         // 设置角色
-        if (user.getInviteCode() != null && !user.getInviteCode().isEmpty()) {
+        if (user.getInviteCode() != null && !user.getInviteCode().isEmpty() && user.getInviteCode().equals(inviteCode)) {
             user.setUserRole("admin");
         } else {
             user.setUserRole("user");
