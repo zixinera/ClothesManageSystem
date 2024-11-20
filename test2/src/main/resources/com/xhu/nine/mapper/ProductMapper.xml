@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xhu.nine.mapper.ProductMapper">
+<mapper namespace="com.xhu.nine.mapper.ProductMapper" >
     <resultMap id="showProduct" type="com.xhu.nine.entity.Product">
         <id column="product_id" property="productId"></id>
         <result column="product_name" property="productName"></result>
@@ -16,6 +16,13 @@
         <result column="user_id" property="userId"></result>
         <result column="sales_status" property="salesStatus"></result>
     </resultMap>
+    <!--UserMap -->
+<!--    <resultMap id="showUser" type="com.xhu.nine.dto.User">-->
+<!--        <id column="user_id" property="userId"></id>-->
+<!--        <result column="user_name" property="userName"></result>-->
+<!--        <result column="user_role" property="userRole"></result>-->
+<!--    </resultMap>-->
+
     <select id="selectProductAll" resultMap="showProduct">
         select * from product_info
         <where>
@@ -54,7 +61,29 @@
             </if>
         </where>
     </select>
+
+<!--    <select id="findUser" resultMap="showUser" >-->
+<!--        select * from p_user -->
+<!--        <where>-->
+<!--        <if test="userId != null and userId != ''">-->
+<!--            and user_id=#{userId}-->
+<!--        </if>-->
+<!--        <if test="userName != null and userName != ''">-->
+<!--                and user_name=#{userName}-->
+<!--        </if>-->
+<!--        <if test="userRole != null and userRole != ''">-->
+<!--                and user_role=#{userRole}-->
+<!--        </if>-->
+
+<!--        </where>-->
+<!--    </select>-->
+
+
     <select id="selectProductById" resultMap="showProduct">
         select * from product_info where product_id = #{productId}
     </select>
+    <!--更新数据-->
+
+
 </mapper>
+

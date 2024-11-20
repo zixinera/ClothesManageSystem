@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhu.nine.mapper.UserMapper">
+    <resultMap id="showUser" type="com.xhu.nine.dto.User">
+        <id column="user_id" property="userId"></id>
+        <result column="user_name" property="userName"></result>
+        <result column="user_role" property="userRole"></result>
+    </resultMap>
+
+    <select id="findUser" resultMap="showUser">
+        select * from p_user where user_role ='user'
+
+    </select>
+</mapper>

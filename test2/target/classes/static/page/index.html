@@ -29,6 +29,7 @@
 <div id="operateDialog">
     <input type="button" value="录入" onclick="openAddDialog()">
     <input type="button" value="删除" onclick="deleteProducts()">
+    <input type="button" value="删除用户" onclick="deleteUsers()">
     <table>
         <tr>
             <td><input type="checkbox" id="selectAll"></td>
@@ -75,7 +76,7 @@
         <span>货物售价：</span><input type="text" id="updateSelling">
         <span>货物数量：</span><input type="text" id="updateQuantity">
         <input type="hidden" id="updateETime">
-        <span>更新时间：</span><input type="text" id="updateUTime">
+        <input type="hidden" id="updateUTime">
         <span>是否退回：</span><input type="text" id="updateReturn">
         <span>操作人编号：</span><input type="text" id="updateUserId">
         <span>销售状态：</span><input type="text" id="updateStatus">
@@ -84,5 +85,6 @@
        <input type="button" value="取消" onclick="closeUpdateDialog()">
     </form>
 </div>
+
 </body>
 </html>
