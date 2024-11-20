@@ -1,7 +1,6 @@
 $(document).ready(function (){
     queryProductsInfo();
-
-
+      deleteusers();
     //做完queryProductsInfo()再把下面这个注释去掉
 
     // 监听全选复选框的变化
@@ -10,6 +9,9 @@ $(document).ready(function (){
         // 设置所有行的复选框状态
         $('#tab input[type="checkbox"]').prop("checked", isChecked);
     });
+
+
+
 })
 
 function queryProductsInfo(){
@@ -77,13 +79,132 @@ function queryProductsInfo(){
 }
 
 
+//跳转删除用户信息界面
+function deleteUsers(){
+    window.location.href = 'deleteuser.html';
+}
+//删除用户信息
+
+function deleteusers(id){
+var userId=id;
+    // 发送PUT请求
+
+    // 发送PUT请求
+    $.ajax({
+        url: '/deleteUser',
+        type: 'POST',
+        contentType: 'application/json', // 指定内容类型为 JSON
+        data: JSON.stringify(userId),
+        dataType:"json",
+        success: function(data) {
+            // 处理成功响应
+            console.log('删除成功:', data);
+            alert('产品删除成功！');
+
+             $.ajax({
+                 url:"/users",
+                 type:"POST",
+                 success:function (res){
+                     console.log(res.data);
+                     if (res.code === 200){
+                         var users = res.data;
+                         console.log(users);
+                         var str = "";
+                         for (var i = 0;i<users.length;i++){
+                             str += "<tr><td>"+users[i].userId+"</td><td>"+users[i].userName+"</td>" +
+                                 "<td><button type=\"button\" onclick='deleteusers("+users[i].userId+")'>删除</button></td></tr>"
+                         }
+                         $("#tab1").html(str);
+                     }
+                 },
+                 error:function (){
+                     alert("服务器出错！");
+                 }
+             })
+
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // 处理错误
+            // console.error('更新失败:', textStatus, errorThrown);
+            // alert('更新失败，请稍后重试。');
+        }
+    });
+
+    $.ajax({
+        url:"/users",
+        type:"POST",
+        success:function (res){
+            console.log(res.data);
+            if (res.code === 200){
+                var users = res.data;
+                console.log(users);
+                var str = "";
+                for (var i = 0;i<users.length;i++){
+                    str += "<tr><td>"+users[i].userId+"</td><td>"+users[i].userName+"</td>" +
+                        "<td><button type=\"button\" onclick='deleteusers("+users[i].userId+")'>删除</button></td></tr>"
+                }
+                $("#tab1").html(str);
+            }
+        },
+        error:function (){
+            // alert("服务器出错！");
+        }
+    })
+
+
+}
 function addProduct(){
 
 }
-
-
-
 function updateProduct(){
+    var productid = $("#updateId").val();
+    var productname = $("#updateName").val();
+    var productcategory = $("#updateCategory").val();
+    var productpurchase = $("#updatePurchase").val();
+    var productselling = $("#updateSelling").val();
+    var productquantity = $("#updateQuantity").val();
+    var judgment = $("#updateReturn").val();
+    var userid = $("#updateUserId").val();
+    var salesstatus = $("#updateStatus").val();
+    var isreturn = null;
+    if (judgment === "是"){
+        isreturn = true;
+    }else {
+        isreturn = false;
+    }
+
+    var product = {
+        "productId":productid,
+        "productName":productname,
+        "productCategory":productcategory,
+        "productPurchase":productpurchase,
+        "productSelling":productselling ,
+        "productQuantity":productquantity,
+        "isReturn":isreturn,
+        "userId":userid,
+        "salesStatus":salesstatus
+    };
+    // 发送PUT请求
+    $.ajax({
+        url: '/updateProduct',
+        type: 'POST',
+        contentType: 'application/json', // 指定内容类型为 JSON
+        data: JSON.stringify(product),
+        dataType:"json",
+        success: function(data) {
+            // 处理成功响应
+            console.log('更新成功:', data);
+            alert('产品更新成功！');
+            // 在这里可以更新前端界面，例如刷新产品列表或更新某些字段
+            queryProductsInfo();
+            $("#updateDialog").hide();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // 处理错误
+            console.error('更新失败:', textStatus, errorThrown);
+            alert('更新失败，请稍后重试。');
+        }
+    });
 
 }
 

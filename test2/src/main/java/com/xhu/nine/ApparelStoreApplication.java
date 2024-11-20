@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @MapperScan("com.xhu.nine.mapper")
+@MapperScan("com.xhu.nine.mapper.UserMapper")
 public class ApparelStoreApplication {
 
     public static void main(String[] args) {

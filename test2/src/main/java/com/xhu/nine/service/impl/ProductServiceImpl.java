@@ -29,4 +29,9 @@ public class ProductServiceImpl implements ProductService {
         Product product = productMapper.selectProductById(productId);
         return AjaxResult.ok().data(product);
     }
+
+    @Override
+    public void updateProduct(Product product) {
+        productMapper.updateProduct(product);
+    }
 }
