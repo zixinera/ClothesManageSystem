@@ -27,9 +27,9 @@
     <input type="button" value="搜索" onclick="queryProductsInfo()"><input type="button" value="重置" onclick="resetAll()">
 </div>
 <div id="operateDialog">
-    <input type="button" value="录入" onclick="openAddDialog()">
-    <input type="button" value="删除" onclick="deleteProducts()">
-    <input type="button" value="删除用户" onclick="deleteUsers()">
+    <input type="button" value="录入" id="addButton" onclick="openAddDialog()">
+    <input type="button" value="删除" id="deleteButton" onclick="deleteProducts()">
+    <input type="button" value="删除用户" id="deleteUser" onclick="deleteUsers()">
     <table>
         <tr>
             <td><input type="checkbox" id="selectAll"></td>
@@ -81,7 +81,7 @@
         <span>操作人编号：</span><input type="text" id="updateUserId">
         <span>销售状态：</span><input type="text" id="updateStatus">
        <br>
-       <input type="button" value="修改" onclick="updateProduct()">
+       <input type="button" value="修改" id="editButton" onclick="updateProduct()">
        <input type="button" value="取消" onclick="closeUpdateDialog()">
     </form>
 </div>

@@ -7,19 +7,19 @@ import com.xhu.nine.Util.Md5Util;
 
 import com.xhu.nine.dto.LoginDto;
 import com.xhu.nine.dto.RegisterDto;
-import com.xhu.nine.entity.User;
 import com.xhu.nine.mapper.UserMapper;
 import com.xhu.nine.result.AjaxResult;
 import com.xhu.nine.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-@Service
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.IOException;
+import java.util.List;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Service// 将当前类交给spring管理
 public class UserServiceImpl implements UserService {
@@ -45,7 +45,7 @@ public AjaxResult login(@RequestBody LoginDto loginDto) {
     String password = loginDto.getPassword();
 
     // 查询用户
-    User u = userMapper.selectUserByName(userName);
+   User u = userMapper.selectUserByName(userName);
     if (u == null) {
         return AjaxResult.error().message("用户名错误!");
     }
@@ -55,7 +55,7 @@ public AjaxResult login(@RequestBody LoginDto loginDto) {
 
     // 检查密码是否匹配
     if (encryptedPassword.equals(u.getUserPassword())) {
-        return AjaxResult.ok().message("登录成功！");
+        return AjaxResult.ok().message("登录成功！").data(u.getUserRole());
     } else {
         return AjaxResult.error().message("密码错误！");
     }

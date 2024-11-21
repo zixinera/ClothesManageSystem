@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/test2/cms_springboot.iml" filepath="$PROJECT_DIR$/test2/cms_springboot.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/urban-robot.iml" filepath="$PROJECT_DIR$/.idea/urban-robot.iml" />
     </modules>
   </component>
