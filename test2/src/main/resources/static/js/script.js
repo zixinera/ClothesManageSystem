@@ -4,6 +4,14 @@ $(document).ready(function (){
       deleteusers();
     //做完queryProductsInfo()再把下面这个注释去掉
 
+    // 在 index 页面加载时检查 sessionStorage 中是否有标志
+
+    window.onload = function() {
+        var sessionLogin = sessionStorage.getItem("sessionLogin");
+        if (sessionLogin !== "true"){
+            window.location.href = '/page/login.html';
+        }
+}
     //为index页面的增删改查功能做判断lh
     var userRole = localStorage.getItem("currentRole");
     console.log(userRole)// 获取用户角色
@@ -78,7 +86,7 @@ function queryProductsInfo(){
                         "<button type=\"button\" class='deleteBtn' onclick='deleteProducts("+products[i].productId+")'>删除</button></td></tr>"
                 }
                 $("#tab").html(str);
-                // 根据角色隐藏按钮
+                // 根据角色隐藏按钮lh
             var userRole = localStorage.getItem("currentRole"); // 获取用户角色
             if (userRole === "user") {
                 $(".updateBtn, .deleteBtn").hide(); // 隐藏普通用户不允许操作的按钮

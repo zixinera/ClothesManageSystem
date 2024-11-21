@@ -28,6 +28,7 @@
                 if (response.code === 200) {
                     var currentRole = response.data;// 获取当前用户的角色
                     localStorage.setItem("currentRole", currentRole);
+                    sessionStorage.setItem("sessionLogin","true");
                     alert('登录成功！');
                     window.location.href = '/page/index.html';// 跳转到首页
                 } else {
