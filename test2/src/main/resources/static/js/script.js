@@ -99,6 +99,7 @@ function queryProductsInfo(){
                 $("#tab").html(str);
                 // 根据角色隐藏按钮lh
             var userRole = localStorage.getItem("currentRole"); // 获取用户角色
+                console.log(userRole);
             if (userRole === "user") {
                 $(".updateBtn, .deleteBtn").hide(); // 隐藏普通用户不允许操作的按钮
             }
