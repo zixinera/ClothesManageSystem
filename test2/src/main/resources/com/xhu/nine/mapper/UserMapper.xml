@@ -6,6 +6,7 @@
     <resultMap id="showUser" type="com.xhu.nine.dto.User">
         <id column="user_id" property="userId"></id>
         <result column="user_name" property="userName"></result>
+        <result column="user_password" property="userPassword"></result>
         <result column="user_role" property="userRole"></result>
     </resultMap>
 
@@ -13,13 +14,7 @@
         select * from p_user where user_role ='user'
 
     </select>
-</mapper>
-    <resultMap id="showUser" type="com.xhu.nine.entity.User">
-        <id column="user_id" property="userId"></id>
-        <result column="user_name" property="userName"></result>
-        <result column="user_password" property="userPassword"></result>
-        <result column="user_role" property="userRole"></result>
-    </resultMap>
+
     <select id="selectUserById" parameterType="String" resultMap="showUser">
         select * from p_user where user_id = #{userId}
     </select>

@@ -24,17 +24,12 @@ public class UserController {
         return user1;
 
     }
-
     //删除用户
     @PostMapping("/deleteUser")
     public AjaxResult deleteUser(@RequestBody int id){
-       userService.deleteUser(id);
-       return AjaxResult.ok();
-
-@RestController
-public class UserController {
-    @Autowired
-    private UserService userService;
+        userService.deleteUser(id);
+        return AjaxResult.ok();
+    }
     @PostMapping ("/login")
     public AjaxResult login(@RequestBody LoginDto loginDto)
     {

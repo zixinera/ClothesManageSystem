@@ -10,4 +10,6 @@ public interface ProductService {
 
 //更新衣服信息
     void updateProduct(Product product);
+
+    void deleteProduct(Integer productId);
 }

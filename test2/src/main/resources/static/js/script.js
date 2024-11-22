@@ -13,8 +13,19 @@ $(document).ready(function (){
 
 
 })
+function showSearchDialog() {
+    $('#searchDialog').show();
+    $('#operateDialog').hide();
+}
+
+function showOperateDialog() {
+    $('#operateDialog').show();
+    $('#searchDialog').hide();
+}
 
 function queryProductsInfo(){
+    showOperateDialog();
+
     var productid = $("#searchId").val();
     var productname = $("#searchName").val();
     var productcategory = $("#searchCategory").val();
@@ -62,7 +73,7 @@ function queryProductsInfo(){
                     }else {
                         judgment = "否";
                     }
-                    str += "<tr><td><input type=\"checkbox\"></td><td>"+products[i].productId+"</td><td>"+products[i].productName+"</td>" +
+                    str += "<tr><td>"+products[i].productId+"</td><td>"+products[i].productName+"</td>" +
                         "<td>"+products[i].productCategory+"</td><td>"+products[i].productPurchase+"</td><td>"+products[i].productSelling+"</td>" +
                         "<td>"+products[i].productQuantity+"</td><td>"+products[i].entryTime+"</td><td>"+products[i].updateTime+"</td>" +
                         "<td>"+judgment+"</td><td>"+products[i].userId+"</td><td>"+products[i].salesStatus+"</td>" +
@@ -99,7 +110,7 @@ var userId=id;
         success: function(data) {
             // 处理成功响应
             console.log('删除成功:', data);
-            alert('产品删除成功！');
+            alert('用户删除成功！');
 
              $.ajax({
                  url:"/users",
@@ -209,9 +220,33 @@ function updateProduct(){
 }
 
 
-function deleteProducts(){
+function deleteProducts(id){
     var isDelete= confirm("请确认是否删除这些记录？");
+    var productid=id;
+    console.log(productid);
     if (isDelete){
+        $.ajax({
+            url: '/deleteProduct',
+            type: 'POST',
+            contentType: 'application/json', // 指定内容类型为 JSON
+            data: JSON.stringify(productid),
+            dataType:"json",
+            success: function(data) {
+                // 处理成功响应
+                console.log('删除成功:', data);
+                alert('产品删除成功！');
+                queryProductsInfo();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // 处理错误
+                // console.error('更新失败:', textStatus, errorThrown);
+                // alert('更新失败，请稍后重试。');
+            }
+        });
+
+
+
+
 
     }
 }

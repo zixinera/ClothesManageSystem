@@ -27,11 +27,16 @@ public class ProductController {
     public AjaxResult findProductById(Integer productId){
         return productService.queryProductById(productId);
     }
-@PostMapping("/updateProduct")
-public AjaxResult updateProduct(@RequestBody Product product){
-    System.out.println(product);
+    @PostMapping("/updateProduct")
+    public AjaxResult updateProduct(@RequestBody Product product){System.out.println(product);
     productService.updateProduct(product);
     return AjaxResult.ok().message("更新成功");
+
 }
+    @PostMapping("/deleteProduct")
+    public AjaxResult deleteProduct(@RequestBody Integer productId){
+        productService.deleteProduct(productId);
+        return AjaxResult.ok().message("删除成功");
+    }
 
 }

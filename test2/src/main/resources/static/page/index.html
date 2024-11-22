@@ -8,7 +8,8 @@
     <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
-<h1>服装店管理系统</h1>
+
+<h1>欢迎使用服装店管理系统</h1>
 <!-- 遮罩层 -->
 <div id="overlay"></div>
 
@@ -24,15 +25,13 @@
     <span>是否退回：</span><input type="text" id="searchReturn" placeholder="请输入货物是否退回">
     <span>操作人编号：</span><input type="text" id="searchUserId" placeholder="请输入操作人编号">
     <span>销售状态：</span><input type="text" id="searchStatus" placeholder="请输入货物销售状态">
-    <input type="button" value="搜索" onclick="queryProductsInfo()"><input type="button" value="重置" onclick="resetAll()">
+    <input  type="button" value="搜索" onclick="queryProductsInfo()"><input type="button" value="重置" onclick="resetAll()">
 </div>
 <div id="operateDialog">
     <input type="button" value="录入" onclick="openAddDialog()">
-    <input type="button" value="删除" onclick="deleteProducts()">
     <input type="button" value="删除用户" onclick="deleteUsers()">
     <table>
         <tr>
-            <td><input type="checkbox" id="selectAll"></td>
             <td>货物编号</td>
             <td>货物名称</td>
             <td>货物类别</td>
@@ -85,6 +84,5 @@
        <input type="button" value="取消" onclick="closeUpdateDialog()">
     </form>
 </div>
-
 </body>
 </html>
