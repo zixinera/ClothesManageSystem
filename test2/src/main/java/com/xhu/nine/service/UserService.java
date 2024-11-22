@@ -5,6 +5,8 @@ import com.xhu.nine.dto.RegisterDto;
 import com.xhu.nine.dto.User;
 import com.xhu.nine.result.AjaxResult;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface UserService {
 
 
