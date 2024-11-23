@@ -16,12 +16,6 @@
         <result column="user_id" property="userId"></result>
         <result column="sales_status" property="salesStatus"></result>
     </resultMap>
-    <!--UserMap -->
-<!--    <resultMap id="showUser" type="com.xhu.nine.dto.User">-->
-<!--        <id column="user_id" property="userId"></id>-->
-<!--        <result column="user_name" property="userName"></result>-->
-<!--        <result column="user_role" property="userRole"></result>-->
-<!--    </resultMap>-->
 
     <select id="selectProductAll" resultMap="showProduct">
         select * from product_info
@@ -62,27 +56,16 @@
         </where>
     </select>
 
-<!--    <select id="findUser" resultMap="showUser" >-->
-<!--        select * from p_user -->
-<!--        <where>-->
-<!--        <if test="userId != null and userId != ''">-->
-<!--            and user_id=#{userId}-->
-<!--        </if>-->
-<!--        <if test="userName != null and userName != ''">-->
-<!--                and user_name=#{userName}-->
-<!--        </if>-->
-<!--        <if test="userRole != null and userRole != ''">-->
-<!--                and user_role=#{userRole}-->
-<!--        </if>-->
-
-<!--        </where>-->
-<!--    </select>-->
-
 
     <select id="selectProductById" resultMap="showProduct">
         select * from product_info where product_id = #{productId}
     </select>
-    <!--更新数据-->
+
+    <insert id="insertProduct">
+        insert into product_info (product_name,product_category,product_purchase,product_selling,product_quantity,entry_time,update_time,is_return,user_id,sales_status)
+        values
+            (#{productName},#{productCategory},#{productPurchase},#{productSelling},#{productQuantity},NOW(),NOW(),#{isReturn},#{userId},#{salesStatus})
+    </insert>
 
 
 </mapper>

@@ -8,82 +8,150 @@
     <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
-<h1>服装店管理系统</h1>
-<!-- 遮罩层 -->
-<div id="overlay"></div>
-
-<div id="searchDialog">
-    <span>货物编号：</span><input type="text" id="searchId" placeholder="请输入货物编号">
-    <span>货物名称：</span><input type="text" id="searchName" placeholder="请输入货物名称">
-    <span>货物类别：</span><input type="text" id="searchCategory" placeholder="请输入货物名称">
-    <span>货物进价：</span><input type="text" id="searchPurchase" placeholder="请输入货物进价">
-    <span>货物售价：</span><input type="text" id="searchSelling" placeholder="请输入货物售价">
-    <span>货物数量：</span><input type="text" id="searchQuantity" placeholder="请输入货物数量">
-    <span>录入时间：</span><input type="date" id="searchETime">
-    <span>更新时间：</span><input type="date" id="searchUTime">
-    <span>是否退回：</span><input type="text" id="searchReturn" placeholder="请输入货物是否退回">
-    <span>操作人编号：</span><input type="text" id="searchUserId" placeholder="请输入操作人编号">
-    <span>销售状态：</span><input type="text" id="searchStatus" placeholder="请输入货物销售状态">
-    <input type="button" value="搜索" onclick="queryProductsInfo()"><input type="button" value="重置" onclick="resetAll()">
+<div id="nav">
+    <h2>货物操作</h2>
+    <a href="#" id="queryButton" onclick="openOperateDialog()">搜索货物</a>
+    <a href="#" id="addButton" onclick="openAddDialog()">添加货物</a>
+    <a href="#" id="deleteButton" onclick="openUpdateByIdDialog()">修改货物</a>
+    <h2>用户管理</h2>
+    <a href="#" id="deleteUser" onclick="openDeleteUsersDialog()">删除用户</a>
+    <h2>账号管理</h2>
+    <a href="#" id="accountManagement" onclick="openUserInformationDialog()">修改密码</a>
 </div>
-<div id="operateDialog">
-    <input type="button" value="录入" onclick="openAddDialog()">
-    <input type="button" value="删除" onclick="deleteProducts()">
-    <input type="button" value="删除用户" onclick="deleteUsers()">
-    <table>
-        <tr>
-            <td>货物编号</td>
-            <td>货物名称</td>
-            <td>货物类别</td>
-            <td>货物进价</td>
-            <td>货物售价</td>
-            <td>货物数量</td>
-            <td>录入时间</td>
-            <td>更新时间</td>
-            <td>是否退回</td>
-            <td>操作人编号</td>
-            <td>销售状态</td>
-            <td>操作</td>
-        </tr>
-        <tbody id="tab"></tbody>
-    </table>
-</div>
+<div id="main">
+    <h1>服装店管理系统</h1>
+    <div id="searchDialog">
+        <span>货物编号：</span><input type="text" id="searchId" placeholder="请输入货物编号">
+        <span>货物名称：</span><input type="text" id="searchName" placeholder="请输入货物名称">
+        <span>货物类别：</span><input type="text" id="searchCategory" placeholder="请输入货物名称">
+        <br>
+        <span>货物进价：</span><input type="text" id="searchPurchase" placeholder="请输入货物进价">
+        <span>货物售价：</span><input type="text" id="searchSelling" placeholder="请输入货物售价">
+        <span>货物数量：</span><input type="text" id="searchQuantity" placeholder="请输入货物数量">
+        <br>
+        <span>录入时间：</span><input type="date" id="searchETime">
+        <span>更新时间：</span><input type="date" id="searchUTime">
+        <span>是否退回：</span><input type="text" id="searchReturn" placeholder="请输入货物是否退回">
+        <br>
+        <span>操作人编号：</span><input type="text" id="searchUserId" placeholder="请输入操作人编号">
+        <span>销售状态：</span><input type="text" id="searchStatus" placeholder="请输入货物销售状态">
+        <input id="searchButton" type="button" value="搜索" onclick="queryProductsInfo()">
+        <input type="button" value="重置" onclick="resetAll()">
+    </div>
 
+    <div id="operateDialog">
+        <table>
+            <tr>
+                <td>货物编号</td>
+                <td>货物名称</td>
+                <td>货物类别</td>
+                <td>货物进价</td>
+                <td>货物售价</td>
+                <td>货物数量</td>
+                <td>录入时间</td>
+                <td>更新时间</td>
+                <td>是否退回</td>
+                <td>操作人编号</td>
+                <td>销售状态</td>
+                <td>操作</td>
+            </tr>
+            <tbody id="tab"></tbody>
+        </table>
+        <div>
+            <span id="pages"></span>
+            <table id="pageTable">
+                <tr>
+                    <td>
+                        <div id="previousPage">
+                            <button id="previous" onclick="previousPage()">上一页</button>
+                        </div>
+                        <input type="hidden" id="totalPage">
+                        <div id="page"></div>
+                        <div id="nextPage">
+                            <button id="next" onclick="nextPage()">下一页</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
 <div style="display: none" id="addDialog">
-    <form>
-        <span>货物名称：</span><input type="text" id="addName" placeholder="请输入货物名称">
-        <span>货物类别：</span><input type="text" id="addCategory" placeholder="请输入货物名称">
-        <span>货物进价：</span><input type="text" id="addPurchase" placeholder="请输入货物进价">
-        <span>货物售价：</span><input type="text" id="addSelling" placeholder="请输入货物售价">
-        <span>货物数量：</span><input type="text" id="addQuantity" placeholder="请输入货物数量">
-        <input type="hidden" id="addETime">
-        <input type="hidden" id="addUTime">
-        <span>是否退回：</span><input type="text" id="addReturn" placeholder="请输入货物是否退回">
-        <span>操作人编号：</span><input type="text" id="addUserId" placeholder="请输入操作人编号">
-        <span>销售状态：</span><input type="text" id="addStatus" placeholder="请输入货物销售状态">
-      <br>
-      <input type="button" value="录入" onclick="addProduct()">
-      <input type="button" value="取消" onclick="closeAddDialog()">
-    </form>
+    <h1>添加货物信息</h1>
+    <div id="addSubDialog">
+        <form>
+            <span>货物名称：</span><input type="text" id="addName" placeholder="请输入货物名称">
+            <span>货物类别：</span><input type="text" id="addCategory" placeholder="请输入货物名称">
+            <span>货物进价：</span><input type="text" id="addPurchase" placeholder="请输入货物进价">
+            <br>
+            <span>货物售价：</span><input type="text" id="addSelling" placeholder="请输入货物售价">
+            <span>货物数量：</span><input type="text" id="addQuantity" placeholder="请输入货物数量">
+            <input type="hidden" id="addETime">
+            <input type="hidden" id="addUTime">
+            <span>是否退回：</span><input type="text" id="addReturn" placeholder="请输入货物是否退回">
+            <br>
+            <span>操作人编号：</span><input type="text" id="addUserId" placeholder="请输入操作人编号">
+            <span>销售状态：</span><input type="text" id="addStatus" placeholder="请输入货物销售状态">
+            <input type="button" value="录入" onclick="addProduct()">
+        </form>
+    </div>
+</div>
+<div style="display: none" id="updateByIdDialog">
+    <h1>修改货物信息</h1>
+    <div id="updateByIdSubDialog">
+        <form>
+            <span>货物编号：</span><input type="text" id="updateById" placeholder="请输入要修改的货物编号">
+            <br>
+            <input type="button" value="修改" onclick="updateByIdDialog()">
+        </form>
+    </div>
 </div>
 <div style="display: none" id="updateDialog">
-    <form>
-        <input type="hidden" id="updateId">
-        <span>货物名称：</span><input type="text" id="updateName">
-        <span>货物类别：</span><input type="text" id="updateCategory">
-        <span>货物进价：</span><input type="text" id="updatePurchase">
-        <span>货物售价：</span><input type="text" id="updateSelling">
-        <span>货物数量：</span><input type="text" id="updateQuantity">
-        <input type="hidden" id="updateETime">
-        <input type="hidden" id="updateUTime">
-        <span>是否退回：</span><input type="text" id="updateReturn">
-        <span>操作人编号：</span><input type="text" id="updateUserId">
-        <span>销售状态：</span><input type="text" id="updateStatus">
-       <br>
-       <input type="button" value="修改" onclick="updateProduct()">
-       <input type="button" value="取消" onclick="closeUpdateDialog()">
-    </form>
+    <h1>修改货物信息</h1>
+    <div id="updateSubDialog">
+        <form>
+            <input type="hidden" id="updateId">
+            <span>货物名称：</span><input type="text" id="updateName">
+            <span>货物类别：</span><input type="text" id="updateCategory">
+            <span>货物进价：</span><input type="text" id="updatePurchase">
+            <br>
+            <span>货物售价：</span><input type="text" id="updateSelling">
+            <span>货物数量：</span><input type="text" id="updateQuantity">
+            <input type="hidden" id="updateETime">
+            <input type="hidden" id="updateUTime">
+            <span>是否退回：</span><input type="text" id="updateReturn">
+            <br>
+            <span>操作人编号：</span><input type="text" id="updateUserId">
+            <span>销售状态：</span><input type="text" id="updateStatus">
+            <br>
+            <input type="button" value="修改" onclick="updateProduct()">
+        </form>
+    </div>
 </div>
-
+<div style="display: none" id="deleteUserDialog">
+    <h1>删除用户</h1>
+    <div id="deleteUserSubDialog">
+        <table>
+            <tr>
+                <td>用户id</td>
+                <td>用户名</td>
+                <td>操作</td>
+            </tr>
+            <tbody id="tab1"></tbody>
+        </table>
+    </div>
+</div>
+<div style="display: none" id="userInformationDialog">
+    <h1>修改密码</h1>
+    <div id="userInformationSubDialog">
+        <span>原密码：</span><input type="password" id="oldPassword" placeholder="请输入原密码" required>
+        <br>
+        <span>新密码：</span><input type="password" id="newPassword" placeholder="请输入新密码" required>
+        <br>
+        <span>确认密码：</span><input type="password" id="confirmNewPassword" placeholder="请再次输入密码" required>
+        <br>
+        <input type="button" onclick="updatePassword()" value="修改"/>
+    </div>
+</div>
 </body>
 </html>

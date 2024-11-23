@@ -7,7 +7,7 @@ import com.xhu.nine.result.AjaxResult;
 public interface ProductService {
     AjaxResult queryProducts(ProductQueryDto productQueryDto);
     AjaxResult queryProductById(Integer productId);
-
+    AjaxResult addProduct(Product product);
 //更新衣服信息
     void updateProduct(Product product);
 

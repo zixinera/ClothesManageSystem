@@ -1,9 +1,6 @@
 package com.xhu.nine.controller;
 
-import com.xhu.nine.dto.ProductQueryDto;
-import com.xhu.nine.dto.User;
-import com.xhu.nine.dto.LoginDto;
-import com.xhu.nine.dto.RegisterDto;
+import com.xhu.nine.dto.*;
 import com.xhu.nine.result.AjaxResult;
 import com.xhu.nine.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +38,11 @@ public class UserController {
     public AjaxResult register(@RequestBody RegisterDto registerDto)
     {
         return userService.register(registerDto);
+    }
+
+    @PostMapping("/updatePassword")
+    public AjaxResult updatePassword(@RequestBody UpdatePasswordDto updatePasswordDto)
+    {
+        return userService.updatePassword(updatePasswordDto);
     }
 }

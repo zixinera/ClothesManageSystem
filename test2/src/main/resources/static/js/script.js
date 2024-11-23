@@ -1,47 +1,29 @@
-
-$(document).ready(function (){
+$(document).ready(function () {
     queryProductsInfo();
-      deleteusers();
+    deleteusers();
     //做完queryProductsInfo()再把下面这个注释去掉
 
     // 在 index 页面加载时检查 sessionStorage 中是否有标志
 
-    window.onload = function() {
+    window.onload = function () {
         var sessionLogin = sessionStorage.getItem("sessionLogin");
-        if (sessionLogin !== "true"){
+        if (sessionLogin !== "true") {
             window.location.href = '/page/login.html';
         }
-}
+    }
     //为index页面的增删改查功能做判断lh
-    var userRole = localStorage.getItem("currentRole");
-    console.log(userRole)// 获取用户角色
-            if (userRole === "user") {
-                $("#addButton,#deleteButton,#deleteUser").hide(); // 隐藏普通用户不允许操作的按钮
-            }
-
-    // 监听全选复选框的变化
-    $("#selectAll").change(function() {
-        var isChecked = $(this).is(":checked"); // 获取全选复选框的状态
-        // 设置所有行的复选框状态
-        $('#tab input[type="checkbox"]').prop("checked", isChecked);
-    });
-
+    var currentRole = localStorage.getItem("currentRole");
+    console.log(currentRole);
+    // 获取用户角色
+    if (currentRole === "user") {
+        $("#addButton,#deleteButton,#deleteUser").hide(); // 隐藏普通用户不允许操作的按钮
+    }
 
 
 })
-function showSearchDialog() {
-    $('#searchDialog').show();
-    $('#operateDialog').hide();
-}
 
-function showOperateDialog() {
-    $('#operateDialog').show();
-    $('#searchDialog').hide();
-}
-
-function queryProductsInfo(){
-    showOperateDialog();
-
+// 查询所有商品信息
+function queryProductsInfo(currentPage = 10, pageSize = 1) {
     var productid = $("#searchId").val();
     var productname = $("#searchName").val();
     var productcategory = $("#searchCategory").val();
@@ -54,71 +36,169 @@ function queryProductsInfo(){
     var userid = $("#searchUserId").val();
     var salesstatus = $("#searchStatus").val();
     var isreturn = null;
-    if (judgment === "是"){
+    if (judgment === "是") {
         isreturn = true;
-    }else {
+    } else {
         isreturn = false;
     }
-    var product ={
-        "productId":productid,
-        "productName":productname,
-        "productCategory":productcategory,
-        "productPurchase":productpurchase,
-        "productSelling":productselling ,
-        "productQuantity":productquantity,
-        "entryTime":entrytime,
-        "updateTime":updatetime,
-        "isReturn":isreturn,
-        "userId":userid,
-        "salesStatus":salesstatus
+    var product = {
+        "productId": productid,
+        "productName": productname,
+        "productCategory": productcategory,
+        "productPurchase": productpurchase,
+        "productSelling": productselling,
+        "productQuantity": productquantity,
+        "entryTime": entrytime,
+        "updateTime": updatetime,
+        "isReturn": isreturn,
+        "userId": userid,
+        "salesStatus": salesstatus
     }
     $.ajax({
-        url:"/products",
-        type:"POST",
-        data:product,
-        dataType:"json",
-        success:function (res){
-            console.log(res.data);
-            if (res.code === 200){
+        url: "/products",
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(product),
+        dataType: "json",
+        success: function (res) {
+            if (res.code === 200) {
                 var products = res.data;
                 var str = "";
-                for (var i = 0;i<products.length;i++){
+                var number = (pageSize - 1) * 10;
+                var pNum = products.length;
+                console.log(pNum);
+                var Num = 0;
+                if (pNum % 10 === 0) {
+                    Num = parseInt(pNum / 10);
+                } else {
+                    Num = parseInt(pNum / 10) + 1;
+                }
+                if (pageSize === Num) {
+                    currentPage = pNum % 10;
+                }
+                for (var m = 0; m < currentPage; m++) {
                     var judgment = null;
-                    if (products[i].isReturn){
+                    if (products[number].isReturn) {
                         judgment = "是";
-                    }else {
+                    } else {
                         judgment = "否";
                     }
-                    str += "<tr><td>"+products[i].productId+"</td><td>"+products[i].productName+"</td>" +
-                        "<td>"+products[i].productCategory+"</td><td>"+products[i].productPurchase+"</td><td>"+products[i].productSelling+"</td>" +
-                        "<td>"+products[i].productQuantity+"</td><td>"+products[i].entryTime+"</td><td>"+products[i].updateTime+"</td>" +
-                        "<td>"+judgment+"</td><td>"+products[i].userId+"</td><td>"+products[i].salesStatus+"</td>" +
-                        "<td><button type=\"button\" class='updateBtn' onclick='openUpdateDialog("+JSON.stringify(products[i])+")'>修改</button>" +
-                        "<button type=\"button\" class='deleteBtn' onclick='deleteProducts("+products[i].productId+")'>删除</button></td></tr>"
+                    str += "<tr><td>" + products[number].productId + "</td><td>" + products[number].productName + "</td>" +
+                        "<td>" + products[number].productCategory + "</td><td>" + products[number].productPurchase + "</td>" +
+                        "<td>" + products[number].productSelling + "</td><td>" + products[number].productQuantity + "</td>" +
+                        "<td>" + products[number].entryTime + "</td><td>" + products[number].updateTime + "</td>" +
+                        "<td>" + judgment + "</td><td>" + products[m].userId + "</td><td>" + products[number].salesStatus + "</td>" +
+                        "<td><button type=\"button\" class='updateBtn' onclick='openUpdateDialog(" + JSON.stringify(products[number]) + ")'>修改</button>" +
+                        "<button type=\"button\" class='deleteBtn' onclick='deleteProducts(" + products[number].productId + ")'>删除</button></td></tr>"
+                    number++;
                 }
+
                 $("#tab").html(str);
-                // 根据角色隐藏按钮lh
-            var userRole = localStorage.getItem("currentRole"); // 获取用户角色
-            if (userRole === "user") {
-                $(".updateBtn, .deleteBtn").hide(); // 隐藏普通用户不允许操作的按钮
+
+                var userRole = localStorage.getItem("currentRole");
+                if (userRole === "user") {
+                    $(".updateBtn, .deleteBtn").hide();
+                }
+                var strPage = "";
+                if (Num <= 5) {
+                    for (var i = 0; i < Num; i++) {
+                        var num1 = i + 1;
+                        strPage += "<td><button id='" + num1 + "' type=\"button\" onclick='switchPages(" + num1 + ")' value='" + Num + "'>" + num1 + "</button></td>"
+                    }
+                } else {
+                    if (pageSize > 3 && pageSize < Num - 2) {
+                        for (var j = pageSize - 3; j < pageSize + 2; j++) {
+                            var num2 = j + 1;
+                            strPage += "<td><button id='" + num2 + "' type=\"button\" onclick='switchPages(" + num2 + ")' value='" + Num + "'>" + num2 + "</button></td>"
+                        }
+                    } else if (pageSize <= 3) {
+                        for (var j = 0; j < 5; j++) {
+                            var num2 = j + 1;
+                            strPage += "<td><button id='" + num2 + "' type=\"button\" onclick='switchPages(" + num2 + ")'  value='" + Num + "'>" + num2 + "</button></td>"
+                        }
+                    } else {
+                        for (var j = Num - 5; j < Num; j++) {
+                            var num2 = j + 1;
+                            strPage += "<td><button id='" + num2 + "' type=\"button\" onclick='switchPages(" + num2 + ")' value='" + Num + "'>" + num2 + "</button></td>"
+                        }
+                    }
+                }
+                $("#page").html(strPage);
             }
-            }
-        },
-        error:function (){
+        }
+        ,
+        error: function (e) {
             alert("服务器出错！");
         }
     })
 }
 
+function updateByIdDialog(){
+    var productId = $("#updateById").val();
+    $.ajax({
+        url: "/findProductById",
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(productId),
+        dataType: "json",
+        success: function (res) {
+            if (res.code === 200) {
+                openUpdateDialog(res.data);
+            }
+        },
+        error: function () {
+            alert("服务器出错！");
+        }
+    })
+}
+//翻页
+function switchPages(num) {
+    queryProductsInfo(10, num);
+    var str = "#" + num;
+    var Num = parseInt($(str).val());
+    $("#totalPage").val(Num);
+    $("#previous").val(num);
+    $("#next").val(num);
+    $("#previous").prop("disabled", false);
+    $("#next").prop("disabled", false);
+}
+
+//上一页
+function previousPage() {
+    var num = parseInt($("#previous").val());
+    console.log(num);
+    if (num === 1) {
+        $("#previous").prop("disabled", true);
+    } else {
+        switchPages(num - 1);
+    }
+}
+
+//下一页
+function nextPage() {
+    var num = parseInt($("#next").val());
+    var Num = parseInt($("#totalPage").val());
+    if (num === Num) {
+        $("#next").prop("disabled", true);
+    } else {
+        switchPages(num + 1);
+    }
+}
 
 //跳转删除用户信息界面
-function deleteUsers(){
-    window.location.href = '/page/deleteuser.html';
+function openDeleteUsersDialog() {
+    $("#userInformationDialog").hide();
+    $("#main").hide();
+    $("#updateDialog").hide();
+    $("#updateByIdDialog").hide();
+    $("#addDialog").hide();
+    $("#deleteUserDialog").show();
 }
+
 //删除用户信息
 
-function deleteusers(id){
-var userId=id;
+function deleteusers(id) {
+    var userId = id;
     // 发送PUT请求
 
     // 发送PUT请求
@@ -127,35 +207,35 @@ var userId=id;
         type: 'POST',
         contentType: 'application/json', // 指定内容类型为 JSON
         data: JSON.stringify(userId),
-        dataType:"json",
-        success: function(data) {
+        dataType: "json",
+        success: function (data) {
             // 处理成功响应
             console.log('删除成功:', data);
             alert('用户删除成功！');
 
-             $.ajax({
-                 url:"/users",
-                 type:"POST",
-                 success:function (res){
-                     console.log(res.data);
-                     if (res.code === 200){
-                         var users = res.data;
-                         console.log(users);
-                         var str = "";
-                         for (var i = 0;i<users.length;i++){
-                             str += "<tr><td>"+users[i].userId+"</td><td>"+users[i].userName+"</td>" +
-                                 "<td><button type=\"button\" onclick='deleteusers("+users[i].userId+")'>删除</button></td></tr>"
-                         }
-                         $("#tab1").html(str);
-                     }
-                 },
-                 error:function (){
-                     alert("服务器出错！");
-                 }
-             })
+            $.ajax({
+                url: "/users",
+                type: "POST",
+                success: function (res) {
+                    console.log(res.data);
+                    if (res.code === 200) {
+                        var users = res.data;
+                        console.log(users);
+                        var str = "";
+                        for (var i = 0; i < users.length; i++) {
+                            str += "<tr><td>" + users[i].userId + "</td><td>" + users[i].userName + "</td>" +
+                                "<td><button type=\"button\" onclick='deleteusers(" + users[i].userId + ")'>删除</button></td></tr>"
+                        }
+                        $("#tab1").html(str);
+                    }
+                },
+                error: function () {
+                    alert("服务器出错！");
+                }
+            })
 
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             // 处理错误
             // console.error('更新失败:', textStatus, errorThrown);
             // alert('更新失败，请稍后重试。');
@@ -163,32 +243,81 @@ var userId=id;
     });
 
     $.ajax({
-        url:"/users",
-        type:"POST",
-        success:function (res){
+        url: "/users",
+        type: "POST",
+        success: function (res) {
             console.log(res.data);
-            if (res.code === 200){
+            if (res.code === 200) {
                 var users = res.data;
                 console.log(users);
                 var str = "";
-                for (var i = 0;i<users.length;i++){
-                    str += "<tr><td>"+users[i].userId+"</td><td>"+users[i].userName+"</td>" +
-                        "<td><button type=\"button\" onclick='deleteusers("+users[i].userId+")'>删除</button></td></tr>"
+                for (var i = 0; i < users.length; i++) {
+                    str += "<tr><td>" + users[i].userId + "</td><td>" + users[i].userName + "</td>" +
+                        "<td><button type=\"button\" onclick='deleteusers(" + users[i].userId + ")'>删除</button></td></tr>"
                 }
                 $("#tab1").html(str);
             }
         },
-        error:function (){
+        error: function () {
             // alert("服务器出错！");
         }
     })
 
 
 }
-function addProduct(){
 
+function addProduct() {
+    var productid = null;
+    var productname = $("#addName").val();
+    var productcategory = $("#addCategory").val();
+    var productpurchase = $("#addPurchase").val();
+    var productselling = $("#addSelling").val();
+    var productquantity = $("#addQuantity").val();
+    var entrytime = $("#addETime").val();
+    var updatetime = $("#addUTime").val();
+    var judgment = $("#addReturn").val();
+    var userid = $("#addUserId").val();
+    var salesstatus = $("#addStatus").val();
+    var isreturn = null;
+    if (judgment === "是") {
+        isreturn = true;
+    } else {
+        isreturn = false;
+    }
+    var product = {
+        "productId": productid,
+        "productName": productname,
+        "productCategory": productcategory,
+        "productPurchase": productpurchase,
+        "productSelling": productselling,
+        "productQuantity": productquantity,
+        "entryTime": entrytime,
+        "updateTime": updatetime,
+        "isReturn": isreturn,
+        "userId": userid,
+        "salesStatus": salesstatus
+    }
+    $.ajax({
+        url: "/add",
+        type: "POST",
+        data: product,
+        dataType: "json",
+        success: function (res) {
+            console.log(res);
+            if (res.code === 200) {
+                confirm(res.message);
+                $("#addDialog").hide();
+                $("#main").show();
+                queryProductsInfo();
+            }
+        },
+        error: function () {
+            alert("服务器出错！");
+        }
+    })
 }
-function updateProduct(){
+
+function updateProduct() {
     var productid = $("#updateId").val();
     var productname = $("#updateName").val();
     var productcategory = $("#updateCategory").val();
@@ -199,22 +328,30 @@ function updateProduct(){
     var userid = $("#updateUserId").val();
     var salesstatus = $("#updateStatus").val();
     var isreturn = null;
-    if (judgment === "是"){
+    if (productid === "") {
+        alert("请输入产品编号！");
+        return;
+    }
+    if (productname === ""){
+        alert("请输入产品名称！");
+        return;
+    }
+    if (judgment === "是") {
         isreturn = true;
-    }else {
+    } else {
         isreturn = false;
     }
 
     var product = {
-        "productId":productid,
-        "productName":productname,
-        "productCategory":productcategory,
-        "productPurchase":productpurchase,
-        "productSelling":productselling ,
-        "productQuantity":productquantity,
-        "isReturn":isreturn,
-        "userId":userid,
-        "salesStatus":salesstatus
+        "productId": productid,
+        "productName": productname,
+        "productCategory": productcategory,
+        "productPurchase": productpurchase,
+        "productSelling": productselling,
+        "productQuantity": productquantity,
+        "isReturn": isreturn,
+        "userId": userid,
+        "salesStatus": salesstatus
     };
     // 发送PUT请求
     $.ajax({
@@ -222,8 +359,8 @@ function updateProduct(){
         type: 'POST',
         contentType: 'application/json', // 指定内容类型为 JSON
         data: JSON.stringify(product),
-        dataType:"json",
-        success: function(data) {
+        dataType: "json",
+        success: function (data) {
             // 处理成功响应
             console.log('更新成功:', data);
             alert('产品更新成功！');
@@ -231,7 +368,7 @@ function updateProduct(){
             queryProductsInfo();
             $("#updateDialog").hide();
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             // 处理错误
             console.error('更新失败:', textStatus, errorThrown);
             alert('更新失败，请稍后重试。');
@@ -241,24 +378,24 @@ function updateProduct(){
 }
 
 
-function deleteProducts(id){
-    var isDelete= confirm("请确认是否删除这些记录？");
-    var productid=id;
+function deleteProducts(id) {
+    var isDelete = confirm("请确认是否删除这些记录？");
+    var productid = id;
     console.log(productid);
-    if (isDelete){
+    if (isDelete) {
         $.ajax({
             url: '/deleteProduct',
             type: 'POST',
             contentType: 'application/json', // 指定内容类型为 JSON
             data: JSON.stringify(productid),
-            dataType:"json",
-            success: function(data) {
+            dataType: "json",
+            success: function (data) {
                 // 处理成功响应
                 console.log('删除成功:', data);
                 alert('产品删除成功！');
                 queryProductsInfo();
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 // 处理错误
                 // console.error('更新失败:', textStatus, errorThrown);
                 // alert('更新失败，请稍后重试。');
@@ -266,14 +403,11 @@ function deleteProducts(id){
         });
 
 
-
-
-
     }
 }
 
 
-function resetAll(){
+function resetAll() {
     $("#searchId").val("");
     $("#searchName").val("");
     $("#searchCategory").val("");
@@ -287,20 +421,46 @@ function resetAll(){
     $("#searchStatus").val("");
 }
 
-function openAddDialog(){
-    $("#addDialog").show();
-}
-
-function closeAddDialog(){
+function openOperateDialog() {
+    $("#updateByIdDialog").hide();
+    $("#userInformationDialog").hide();
+    $("#deleteUserDialog").hide();
+    $("#updateDialog").hide();
     $("#addDialog").hide();
+    $("#main").show();
 }
 
-function openUpdateDialog(product){
+function openAddDialog() {
+    $("#updateByIdDialog").hide();
+    $("#userInformationDialog").hide();
+    $("#deleteUserDialog").hide();
+    $("#main").hide();
+    $("#updateDialog").hide();
+    $("#addDialog").show();
+    var userId1 = localStorage.getItem("userId");
+    $("#addUserId").val(userId1);
+}
+
+function openUpdateByIdDialog() {
+    $("#userInformationDialog").hide();
+    $("#deleteUserDialog").hide();
+    $("#main").hide();
+    $("#addDialog").hide();
+    $("#updateDialog").hide();
+    $("#updateByIdDialog").show();
+}
+function openUpdateDialog(product) {
+    $("#updateByIdDialog").hide();
+    $("#userInformationDialog").hide();
+    $("#deleteUserDialog").hide();
+    $("#main").hide();
+    $("#addDialog").hide();
     $("#updateDialog").show();
+
     var judgment = null;
-    if (product.isReturn){
+    if (product.isReturn) {
         judgment = "是";
-    }else {
+    } else {
         judgment = "否";
     }
     $("#updateId").val(product.productId);
@@ -316,9 +476,55 @@ function openUpdateDialog(product){
     $("#updateStatus").val(product.salesStatus);
 }
 
-function closeUpdateDialog(){
+function openUserInformationDialog() {
+    $("#deleteUserDialog").hide();
+    $("#updateByIdDialog").hide();
+    $("#addDialog").hide();
     $("#updateDialog").hide();
+    $("#main").hide();
+    $("#userInformationDialog").show();
 }
 
-
+function updatePassword() {
+    var oldPassword = $("#oldPassword").val();
+    var newPassword = $("#newPassword").val();
+    var confirmPassword = $("#confirmNewPassword").val();
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+        alert("密码必须包含大写字母、小写字母和数字，并且长度至少为8个字符！");
+        return;
+    }
+    if (newPassword !== confirmPassword) {
+        alert("两次密码不一致！");
+        return;
+    }
+    var userId = localStorage.getItem("userId");
+    var newUser = {
+        "userId": userId,
+        "oldPassword": oldPassword,
+        "newPassword": newPassword
+    }
+    $.ajax({
+        url: "/updatePassword",
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(newUser),
+        dataType: "json",
+        success: function (res) {
+            if (res.code === 200) {
+                alert("密码修改成功！");
+                $("#userInformationDialog").hide();
+                $("#main").show();
+            }
+        },
+        error: function (res) {
+            if (res.code === 400){
+                alert("原密码错误！");
+            }else if (res.code === 401){
+                alert("新旧密码不能相同！");
+            }
+            alert("密码修改失败！");
+        }
+    })
+}
 

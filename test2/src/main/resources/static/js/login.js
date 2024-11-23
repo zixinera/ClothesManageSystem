@@ -7,7 +7,7 @@
         // 获取用户输入的用户名和密码
         const username = $('#username').val().trim();
         const password = $('#password').val().trim();
-
+        const userrole = null;
         // 检查输入是否为空
         if (!username || !password) {
             $('#errorMessage').text('用户名或密码不能为空！');
@@ -21,13 +21,15 @@
             contentType: 'application/json', // 发送 JSON 数据
             data: JSON.stringify({
                 "username": username,
-                "password": password
+                "password": password,
+                "userRole": userrole
             }),
             dataType:"json",
             success: function (response) {
                 if (response.code === 200) {
-                    var currentRole = response.data;// 获取当前用户的角色
-                    localStorage.setItem("currentRole", currentRole);
+                    var user = response.data;// 获取当前用户的角色
+                    localStorage.setItem("currentRole", user.userRole);
+                    localStorage.setItem("userId", user.userId);
                     sessionStorage.setItem("sessionLogin","true");
                     alert('登录成功！');
                     window.location.href = '/page/index.html';// 跳转到首页

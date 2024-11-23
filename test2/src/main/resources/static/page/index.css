@@ -1,54 +1,161 @@
-/* 通用样式 */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
-}
-
-/* 标题样式 */
-h1 {
-    text-align: center;
-    color: #333;
-}
-/* 遮罩层样式 */
-#overlay {
-    display: none;
+/* 导航栏样式 */
+#nav {
+    background-color: rgb(63, 73, 117); /* 蓝色背景 */
+    width: 240px;
+    color: white;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000; /* 确保在最上层 */
+    padding: 20px 10px;
+    box-sizing: border-box;
 }
 
-/* 对话框样式 */
-#addDialog, #updateDialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
-    width: 400px; /* 或根据需要设置为百分比 */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    z-index: 1001; /* 确保在遮罩层之上 */
+#nav h2 {
+    font-size: 18px;
+    color: white;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
 }
-#searchDialog, #operateDialog{
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+
+#nav a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    margin: 10px 0;
+    font-size: 16px;
+    padding: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#nav a:hover {
+    background-color: rgb(79, 86, 133); /* 鼠标悬停效果 */
+    border-radius: 4px;
+}
+
+/* 主内容区域样式 */
+#main {
+    margin-left: 260px; /* 避开导航栏的宽度 */
     padding: 20px;
-    margin: 20px auto;
-    width: 80%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* 表格样式 */
+#operateDialog table,
+#deleteUserSubDialog table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#operateDialog th,
+#deleteUserSubDialog th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+}
+
+#operateDialog td,
+#deleteUserSubDialog td {
+    padding: 10px;
+    text-align: center;
+}
+
+#operateDialog tbody tr:nth-child(even),
+#deleteUserSubDialog tbody tr:nth-child(odd) {
+    background-color: #f9f9f9; /* 条纹样式 */
+}
+
+#operateDialog tbody tr:hover,
+#deleteUserSubDialog tbody tr:hover {
+    background-color: #f1f1f1; /* 悬停效果 */
+}
+
+#pageTable button {
+    background-color: #ffffff; /* 白色页码按钮 */
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    margin: 2px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+#pageTable button:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* 分页按钮 */
+#previous,
+#next {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#previous:hover,
+#next:hover {
+    background-color: #0056b3;
+}
+
+/* 按钮样式 */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 /* 输入框样式 */
-input[type="text"], input[type="date"]{
+input[type="text"],
+input[type="password"],
+input[type="date"] {
+    width: 300px;
+    padding: 8px;
+    margin: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* 对话框隐藏样式 */
+#addDialog,
+#updateByIdDialog,
+#updateDialog,
+#deleteUserDialog,
+#userInformationDialog {
+    display: grid;
+    padding: 20px;
+    margin-left: 260px;
+    background-color: white;
+    border-radius: 4px;
+}
+
+
+#addSubDialog input[type="text"],
+#updateByIdSubDialog input[type="text"],
+#updateSubDialog input[type="text"],
+#userInformationSubDialog input[type="password"]{
     margin-bottom: 10px;
     padding: 8px;
     width: calc(100% - 20px);
@@ -56,49 +163,45 @@ input[type="text"], input[type="date"]{
     border-radius: 4px;
 }
 
-/* 按钮样式 */
-input[type="button"] {
-    background-color: #00b3ff;
-    color: white;
-    cursor: pointer;
-    margin-bottom: 10px;
-    padding: 8px;
-    width: auto;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-input[type="button"]:hover {
-    background-color: #008dff;
-}
-
-/* 表格样式 */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-td {
-    padding: 10px;
-    text-align: center;
-    background-color: #fff;
-    border: 1px solid #ddd;
-}
-
-/* 表头样式 */
-th {
+#searchDialog input[type="button"],
+#addSubDialog input[type="button"],
+#updateByIdSubDialog input[type="button"],
+#updateSubDialog input[type="button"],
+#userInformationSubDialog input[type="button"]{
     background-color: #007bff;
     color: white;
-}
-
-/* 选择框样式 */
-#selectAll {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* 隐藏对话框 */
-#addDialog, #updateDialog {
-    display: none;
+#addSubDialog input[type="button"],
+#updateByIdSubDialog input[type="button"],
+#updateSubDialog input[type="button"],
+#userInformationSubDialog input[type="button"]{
+    width: calc(100% - 20px);
+}
+
+#addSubDialog input[type="button"]:hover,
+#updateByIdSubDialog input[type="button"]:hover,
+#updateSubDialog input[type="button"]:hover,
+#userInformationSubDialog input[type="button"]:hover{
+    background-color: #0056b3;
+}
+
+#searchButton{
+    margin-right: 10px;
+}
+
+.updateBtn{
+    margin-bottom: 10px;
+}
+
+#page,
+#previousPage,
+#nextPage {
+    display: inline-block;
+    white-space: nowrap;
 }

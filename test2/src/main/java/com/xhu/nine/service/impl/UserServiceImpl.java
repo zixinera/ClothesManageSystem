@@ -1,13 +1,12 @@
 package com.xhu.nine.service.impl;
 
-import com.xhu.nine.dto.ProductQueryDto;
+
+import com.xhu.nine.dto.UpdatePasswordDto;
 import com.xhu.nine.dto.User;
-import com.xhu.nine.entity.Product;
 import com.xhu.nine.Util.Md5Util;
 
 import com.xhu.nine.dto.LoginDto;
 import com.xhu.nine.dto.RegisterDto;
-import com.xhu.nine.entity.User;
 import com.xhu.nine.mapper.UserMapper;
 import com.xhu.nine.result.AjaxResult;
 import com.xhu.nine.service.UserService;
@@ -16,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
-@Service
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -55,7 +54,7 @@ public AjaxResult login(@RequestBody LoginDto loginDto) {
 
     // 检查密码是否匹配
     if (encryptedPassword.equals(u.getUserPassword())) {
-        return AjaxResult.ok().message("登录成功！");
+        return AjaxResult.ok().message("登录成功！").data(u);
     } else {
         return AjaxResult.error().message("密码错误！");
     }
@@ -89,5 +88,21 @@ public AjaxResult login(@RequestBody LoginDto loginDto) {
         userMapper.insertUser(user);
 
         return AjaxResult.ok().message("注册成功!");
+    }
+
+    @Override
+    public AjaxResult updatePassword(UpdatePasswordDto updatePasswordDto) {
+        if (updatePasswordDto.getOldPassword().equals(updatePasswordDto.getNewPassword())){
+            return AjaxResult.error().code(401);
+        }
+        updatePasswordDto.setOldPassword(Md5Util.getMD5String(updatePasswordDto.getOldPassword()));
+        updatePasswordDto.setNewPassword(Md5Util.getMD5String(updatePasswordDto.getNewPassword()));
+        User oldUser = userMapper.selectUserById(updatePasswordDto.getUserId());
+        if (oldUser.getUserPassword().equals(updatePasswordDto.getOldPassword())) {
+            userMapper.updateUser(updatePasswordDto);
+            return AjaxResult.ok().message("修改成功!");
+        }else {
+            return AjaxResult.error().code(400);
+        }
     }
 }

@@ -9,13 +9,16 @@
         <result column="user_password" property="userPassword"></result>
         <result column="user_role" property="userRole"></result>
     </resultMap>
-
+    <resultMap id="showUserPassword" type="com.xhu.nine.dto.User">
+        <id column="user_id" property="userId"></id>
+        <result column="user_password" property="newPassword"></result>
+    </resultMap>
     <select id="findUser" resultMap="showUser">
         select * from p_user where user_role ='user'
 
     </select>
 
-    <select id="selectUserById" parameterType="String" resultMap="showUser">
+    <select id="selectUserById" resultMap="showUser">
         select * from p_user where user_id = #{userId}
     </select>
     <select id="selectUserByName" parameterType="String" resultMap="showUser">
@@ -27,4 +30,7 @@
     <delete id="deleteByUserId" parameterType="java.lang.Integer">
         delete from p_user where user_id = #{userId}
     </delete>
+    <update id="updateUser" parameterType="com.xhu.nine.dto.UpdatePasswordDto">
+        update p_user set user_password = #{newPassword} where user_id = #{userId}
+    </update>
 </mapper>

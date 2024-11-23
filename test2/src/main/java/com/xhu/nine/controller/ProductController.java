@@ -24,11 +24,12 @@ public class ProductController {
     //获取Users
 
     @PostMapping("/findProductById")
-    public AjaxResult findProductById(Integer productId){
+    public AjaxResult findProductById(@RequestBody Integer productId){
+        System.out.println(productId);
         return productService.queryProductById(productId);
     }
     @PostMapping("/updateProduct")
-    public AjaxResult updateProduct(@RequestBody Product product){System.out.println(product);
+    public AjaxResult updateProduct(@RequestBody Product product){
     productService.updateProduct(product);
     return AjaxResult.ok().message("更新成功");
 
@@ -38,5 +39,8 @@ public class ProductController {
         productService.deleteProduct(productId);
         return AjaxResult.ok().message("删除成功");
     }
-
+    @PostMapping("/add")
+    public AjaxResult addProduct(Product product){
+        return productService.addProduct(product);
+    }
 }
