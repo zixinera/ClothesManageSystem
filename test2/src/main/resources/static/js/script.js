@@ -54,11 +54,11 @@ function queryProductsInfo(currentPage = 10, pageSize = 1) {
         "userId": userid,
         "salesStatus": salesstatus
     }
+    console.log(product);
     $.ajax({
         url: "/products",
         type: "POST",
-        contentType: 'application/json',
-        data: JSON.stringify(product),
+        data: product,
         dataType: "json",
         success: function (res) {
             if (res.code === 200) {
